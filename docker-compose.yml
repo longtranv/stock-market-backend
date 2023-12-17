@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  node-app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - mynetwork
+    depends_on:
+      - database
+
+  database:
+    image: mongo:latest
+    environment:
+      - MONGODB_URL=${MONGODB_URL}
+    networks:
+      - mynetwork
+    volumes:
+      - database-data:/var/lib/mongodb/data
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  database-data:
