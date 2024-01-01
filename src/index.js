@@ -1,13 +1,15 @@
 const mongoose = require('mongoose');
 const app = require('./app');
+const config = require('./config/config');
+const logger = require('./config/logger');
 
 let server;
 
-mongoose.connect("mongodb+srv://gialongfp:Long15012002@stockdatabase1.m1cbarp.mongodb.net/sample_restaurants?retryWrites=true&w=majority").then(()=>{
-    console.log('connectedt to mongoDB');
-    server = app.listen(5000, ()=>{
-        console.log("listening on port 5000");
-    })
+mongoose.connect(config.mongoose.url).then(()=>{
+    logger.info('connectedt to mongoDB');
+    server = app.listen(config.port, ()=>{
+        logger.info(`listening on port ${config.port}`);
+    });
 });
 
 
@@ -15,7 +17,7 @@ mongoose.connect("mongodb+srv://gialongfp:Long15012002@stockdatabase1.m1cbarp.mo
 const exitHandler = () => {
     if (server) {
       server.close(() => {
-        console.log('Server closed');
+        logger.info('Server closed');
         process.exit(1);
       });
     } else {
@@ -24,7 +26,7 @@ const exitHandler = () => {
   };
   
   const unexpectedErrorHandler = (error) => {
-    console.log(error);
+    logger.error(error);
     exitHandler();
   };
   
@@ -32,7 +34,7 @@ const exitHandler = () => {
   process.on('unhandledRejection', unexpectedErrorHandler);
   
   process.on('SIGTERM', () => {
-    console.log('SIGTERM received');
+    logger.info('SIGTERM received');
     if (server) {
       server.close();
     }

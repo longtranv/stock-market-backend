@@ -1,21 +1,26 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const stockController = require('../controllers/stock')
+const createOrder = require('../controllers/order');
+const authController = require('../controllers/auth')
 
 const router = express.Router();
 
 
-router.post('/register', (req, res)=>{
-    console.log(req.body)
-    res.send('Dang ki thanh cong')
-});
+router.post('/register', authController.register);
 
-router.get('/get', async (req, res)=>{
-   const specificCollection = await mongoose.connection.db.collection('restaurants');
-   const result = await specificCollection.find().toArray();
-   console.log(result)
+router
+    .route('/stock')
+    .get(stockController.getStocks)
+    .post(stockController.createNewStock);
 
-   res.send(result)
-});
+router.route('/insertstock').post(stockController.insertStocks);
+
+router.route('/order').post(createOrder);
+
+
+
+
 
 module.exports = router;
 
