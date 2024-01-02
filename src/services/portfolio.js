@@ -12,14 +12,18 @@ const createPortfolio = async(userId, symbol)=>{
     return createdPortfolio;
 };
 
-const updatePortfolio = async(userId, symbol, quantity, currentPrice)=>{
+const updatePortfolio = async(userId, symbol, updateBody)=>{
     const portfo = await Portfolio.findOne({userId: userId, symbol: symbol});
     if(!portfo){
         throw new apiError(httpStatus.NOT_FOUND, 'portfolio not found');
     }
-
+    Object.assign(portfo, updateBody);
+    await portfo.save();
+    return portfo;
 }
 
 module.exports = {
-    getPortfolio
+    getPortfolio,
+    createPortfolio,
+    updatePortfolio
 }

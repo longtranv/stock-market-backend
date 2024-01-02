@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const stockController = require('../controllers/stock')
-const createOrder = require('../controllers/order');
+const orderController = require('../controllers/order');
 const authController = require('../controllers/auth')
 
 const router = express.Router();
@@ -16,9 +16,7 @@ router
 
 router.route('/insertstock').post(stockController.insertStocks);
 
-router.route('/order').post(createOrder);
-
-
+router.route('/order').post(orderController.createOrder);
 
 
 

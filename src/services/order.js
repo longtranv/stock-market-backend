@@ -6,14 +6,14 @@ const matchLimitOrder = async(order)=>{
     let matchOrderList = [];
     if(order.orderType === 'sell'){
         matchOrderList = await Order.
-        find({userId: {$ne: order.userId}, orderType: 'buy', symbol: order.symbol}).
+        find({userId: {$ne: order.userId}, orderType: 'buy', symbol: order.symbol, status: 'pending'}).
         where('price').
         gte(order.price).
         sort({created_at: 'asc'}).
         exec()}
     else{
         matchOrderList = await Order.
-        find({userId: {$ne: order.userId}, orderType: 'sell', symbol: order.symbol}).
+        find({userId: {$ne: order.userId}, orderType: 'sell', symbol: order.symbol, status: 'pending'}).
         where('price').
         lte(order.price).
         sort({created_at: 'asc'}).
@@ -31,6 +31,10 @@ const findOrderbyId = async(id)=>{
     return Order.findById(id);
 };
 
+const getAllOrders = async(userid)=>{
+    return Order.find({userId: userid});
+}
+
 const updateOrderbyId = async(id, updateBody)=>{
     const order = await findOrderbyId(id);
     if(!order){
@@ -46,5 +50,6 @@ module.exports =
     matchLimitOrder,
     createOrder,
     findOrderbyId,
-    updateOrderbyId
+    updateOrderbyId,
+    getAllOrders
 };

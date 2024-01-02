@@ -1,11 +1,12 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const {authService, userService, tokenService, emailService} = require('../services');
-
+const walletService = require('../services/wallet');
 
 const register = catchAsync(async (req, res) => {
     const user = await userService.createUser(req.body);
     const tokens = await tokenService.generateAuthTokens(user);
+    const userWallet = await walletService.createWallet(user._id);
     res.status(httpStatus.CREATED).send({ user, tokens });
   });
   
