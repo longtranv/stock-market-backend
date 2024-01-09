@@ -1,4 +1,5 @@
 const Order = require('../models/order');
+const stockService = require('./stock');
 const httpStatus = require('http-status');
 const apiError = require('../utils/apiError');
 
@@ -45,11 +46,21 @@ const updateOrderbyId = async(id, updateBody)=>{
     return order;
 }
 
+const calculateVolume = async(symbol)=>{
+    const sellOrders = await Order.find({symbol: symbol, orderType: 'sell', status: 'pending'});
+    let newVolume = 0;
+    sellOrders.map((order)=>{
+        newVolume += order.quantity;
+    });
+    return newVolume;
+};
+
 module.exports = 
 {
     matchLimitOrder,
     createOrder,
     findOrderbyId,
     updateOrderbyId,
-    getAllOrders
+    getAllOrders,
+    calculateVolume
 };

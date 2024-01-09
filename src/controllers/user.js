@@ -3,11 +3,20 @@ const catchAsync = require('../utils/catchAsync');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/apiError');
 const {userService} = require('../services');
+const portfolioService = require('../services/portfolio');
+const walletService = require('../services/wallet');
 
 const createUser = catchAsync(async (req, res) => {
     const user = await userService.createUser(req.body);
     res.status(httpStatus.CREATED).send(user);
   });
+
+  const createBroker = catchAsync(async(req, res)=>{
+    const broker = await userService.createUser(req.body.user);
+    const brokerPortfolio = await portfolioService.createPortfolio(broker._id, req.body.symbol, req.body.quantity);
+    const brokerWallet = await walletService.createWallet(broker._id);
+    res.status(httpStatus.CREATED).send(broker);
+  })
   
   const getUsers = catchAsync(async (req, res) => {
     console.log(req.body);
@@ -42,4 +51,5 @@ const createUser = catchAsync(async (req, res) => {
     getUser,
     updateUser,
     deleteUser,
+    createBroker
   };

@@ -18,9 +18,14 @@ const getStocks = catchAsync(async (req, res)=>{
     res.send(result);
 })
 
+const getStock = catchAsync(async(req, res)=>{
+    const stockSeries = await StockService.queryStock(req.body.symbol);
+    res.status(httpStatus.OK).send(stockSeries);
+})
 
 module.exports = {
     insertStocks,
     createNewStock,
-    getStocks
+    getStocks,
+    getStock
 }

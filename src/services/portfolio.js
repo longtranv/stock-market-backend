@@ -7,8 +7,8 @@ const getPortfolio = async(symbol, userid)=>{
     return portfolio;
 };
 
-const createPortfolio = async(userId, symbol)=>{
-    const createdPortfolio = await Portfolio.create({userId: userId, symbol: symbol});
+const createPortfolio = async(userId, symbol, quantity = 0)=>{
+    const createdPortfolio = await Portfolio.create({userId: userId, symbol: symbol, quantity: quantity});
     return createdPortfolio;
 };
 

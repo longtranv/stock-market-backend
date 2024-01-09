@@ -27,9 +27,9 @@ const createOrder = catchAsync(async(req, res)=>{
    }
    //check price constraint
    const onlyDate = new Date(order.created_at);
-   onlyDate.setHours(0,0,0,0);
-   const stock = await stockService.getStock(order.symbol, onlyDate.toISOString());
-   if(order.price>stock.high || order.price<stock.low){
+   const inputDate = onlyDate.toISOString().split('T')[0];
+   const stock = await stockService.getStock(order.symbol, inputDate);
+   if(order.price>(stock.open+7/100*stock.open) || order.price<(stock.open-7/100*stock.open)){
       throw new ApiError(httpStatus.NOT_ACCEPTABLE, "the price of your order exceeds the ceiling price or below the floor price of market")
    }
    //perform order matching
@@ -87,16 +87,26 @@ const createOrder = catchAsync(async(req, res)=>{
       await orderService.updateOrderbyId(item.id, item);
    });
    const createdOrder = await orderService.createOrder(order);
+   await stockService.updateCurrentPrice(order.symbol);
    res.status(httpStatus.CREATED).send(createdOrder);
 });
 
 const getOrders = catchAsync(async(req, res)=>{
    const orders = await orderService.getAllOrders(req.body);
    res.send(orders);
-})
+});
+
+const cancelOrder = catchAsync(async(req, res)=>{
+   const updateBody = {
+      status: 'cancelled'
+   }
+   const cancelledOrder = await orderService.updateOrderbyId(req.body, updateBody);
+   res.status(httpStatus.OK).send(cancelledOrder);
+});
 
 module.exports = {
    createOrder,
-   getOrders
+   getOrders,
+   cancelOrder
 }
 
