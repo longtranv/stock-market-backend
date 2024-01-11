@@ -7,6 +7,11 @@ const getPortfolio = async(symbol, userid)=>{
     return portfolio;
 };
 
+const getAllPortfolio = async(userid)=>{
+    const portfolios = await Portfolio.find({userId: userid});
+    return portfolios;
+}
+
 const createPortfolio = async(userId, symbol, quantity = 0)=>{
     const createdPortfolio = await Portfolio.create({userId: userId, symbol: symbol, quantity: quantity});
     return createdPortfolio;
@@ -25,5 +30,6 @@ const updatePortfolio = async(userId, symbol, updateBody)=>{
 module.exports = {
     getPortfolio,
     createPortfolio,
-    updatePortfolio
+    updatePortfolio,
+    getAllPortfolio
 }
