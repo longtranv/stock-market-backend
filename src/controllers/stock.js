@@ -23,9 +23,15 @@ const getStock = catchAsync(async(req, res)=>{
     res.status(httpStatus.OK).send(stockSeries);
 })
 
+const getStockChange = catchAsync(async(req, res)=>{
+    const changes = await StockService.getChange();
+    res.status(httpStatus.OK).send(changes)
+})
+
 module.exports = {
     insertStocks,
     createNewStock,
     getStocks,
-    getStock
+    getStock,
+    getStockChange
 }

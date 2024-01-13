@@ -10,6 +10,7 @@ const router = express.Router();
 
 
 router.post('/register', authController.register);
+router.post('/login', authController.login)
 
 router
     .route('/stock')
@@ -17,6 +18,9 @@ router
     .post(stockController.createNewStock);
 
 router.route('/insertstock').post(stockController.insertStocks);
+
+router.get('/stocklist', stockController.getStocks);
+router.get('/changelist', stockController.getStockChange);
 
 router.route('/order').post(orderController.createOrder);
 router.route('/broker').post(userController.createBroker);

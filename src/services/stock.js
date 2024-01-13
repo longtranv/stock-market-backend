@@ -18,7 +18,7 @@ const insertNewDayStocks = async (todayStock) =>{
         if(changeStock.length===0){
             await Change.create({symbol: stock.name});
         }else{
-            console.log("change existed")
+
         }
     });
     return Stock.insertMany(todayStock);
@@ -26,10 +26,8 @@ const insertNewDayStocks = async (todayStock) =>{
 
 const queryStock = async (symbol)=>{
     const stockSeries = await Stock.find({name: symbol}).sort({timestamp: 'asc'});
-    console.log(symbol)
     if(stockSeries.length===0){throw new ApiError(httpStatus.NOT_FOUND, 'stock not found')}
     const stockChange = await Change.findOne({symbol: symbol});
-    console.log(stockChange)
     const stockVolume = await orderSevice.calculateVolume(symbol);
     const theStock = {
         series: stockSeries,
@@ -74,10 +72,15 @@ const updateCurrentPrice = async(symbol)=>{
     let changePercent = 0;
     if(stockChange.previous !== averagePrice && stockChange.previous !== 0){
         stockChange.current = averagePrice;
-        stockChange.change = (Math.abs(averagePrice-stockChange.previous)/stockChange.previous)*100;
+        stockChange.change = ((averagePrice-stockChange.previous)/stockChange.previous)*100;
     }
     await stockChange.save();
     return stockChange;
+}
+
+const getChange = async()=>{
+    const changes = await Change.find();
+    return changes;
 }
 
 module.exports = {
@@ -86,5 +89,6 @@ module.exports = {
     getAllStocks,
     insertNewDayStocks,
     getStock,
-    updateCurrentPrice
+    updateCurrentPrice,
+    getChange
 }
