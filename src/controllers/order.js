@@ -10,7 +10,6 @@ const mailService = require('../services/email')
 
 const createOrder = catchAsync(async(req, res)=>{
    const order = {...req.body};
-   console.log(order)
    //check sell order valid
    if(order.orderType==='sell'){
       const userPortfolio = await portfolioService.getPortfolio(order.symbol, order.userId);
@@ -94,7 +93,6 @@ const createOrder = catchAsync(async(req, res)=>{
 
 const getOrders = catchAsync(async(req, res)=>{
    const orders = await orderService.getAllOrders(req.query.userId);
-   console.log(req.query.userId);
    res.send(orders);
 });
 

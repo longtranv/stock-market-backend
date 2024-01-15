@@ -10,7 +10,6 @@ const getUserPorfolio = catchAsync(async(req, res)=>{
         item.currentPrice = matchStock.open;
     }
     
-    console.log(userPofolios)
     res.status(httpStatus.OK).send(userPofolios);
 });
 
