@@ -5,7 +5,7 @@ const stripe = require("stripe")('sk_test_51OWt0NGObWmLgyNXxqiGtNwgMaN2Ra1BvgozE
 
 
 const getUserWallet = catchAsync(async(req, res)=>{
-    const userWallet = await walletService.getWallet(req.body.userId);
+    const userWallet = await walletService.getWallet(req.query.userId);
     res.status(httpStatus.OK).send(userWallet);
 });
 

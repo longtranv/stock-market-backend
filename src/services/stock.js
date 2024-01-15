@@ -38,10 +38,14 @@ const queryStock = async (symbol)=>{
     return theStock;
 }
 
-const getStock = async(symbol, date)=>{
+const getStock = async(symbol)=>{
+
+    const date = new Date();
+    const today = date.toISOString().split('T')[0];
+
     const stock = await Stock.findOne({name: symbol, $expr: {
         $eq: [
-            {$dateToString: {format: '%Y-%m-%d', date: '$timestamp'}}, date
+            {$dateToString: {format: '%Y-%m-%d', date: '$timestamp'}}, today
         ]
     }});
     if(!stock){
@@ -67,7 +71,10 @@ const updateCurrentPrice = async(symbol)=>{
     completedOrders.map(order=>{
         averagePrice += order.price;
     });
-    averagePrice /= completedOrders.length();
+    if(completedOrders.length>0){
+        averagePrice /= completedOrders.length;
+    }
+    
     const stockChange = await Change.findOne({symbol: symbol});
     let changePercent = 0;
     if(stockChange.previous !== averagePrice && stockChange.previous !== 0){

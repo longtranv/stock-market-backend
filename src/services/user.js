@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const User = require('../models/user');
 const ApiError = require('../utils/apiError');
+const walletService = require('../services/wallet')
 
 /**
  * Create a user
@@ -11,7 +12,9 @@ const createUser = async (userBody) => {
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
-  return User.create(userBody);
+  const user = await User.create(userBody);
+  const userWallet = await walletService.createWallet(user._id);
+  return user;
 };
 
 /**

@@ -19,7 +19,7 @@ const getStocks = catchAsync(async (req, res)=>{
 })
 
 const getStock = catchAsync(async(req, res)=>{
-    const stockSeries = await StockService.queryStock(req.body.symbol);
+    const stockSeries = await StockService.queryStock(req.query.symbol);
     res.status(httpStatus.OK).send(stockSeries);
 })
 

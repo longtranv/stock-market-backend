@@ -4,7 +4,6 @@ const userService = require('./user');
 const Token = require('../models/token');
 const ApiError = require('../utils/apiError');
 const { tokenTypes } = require('../config/tokens');
-
 /**
  * Login with username and password
  * @param {string} email
@@ -25,11 +24,10 @@ const loginUserWithEmailAndPassword = async (email, password) => {
  * @returns {Promise}
  */
 const logout = async (refreshToken) => {
-  const refreshTokenDoc = await Token.findOne({ token: refreshToken, type: tokenTypes.REFRESH, blacklisted: false });
+  const refreshTokenDoc = await Token.deleteMany({ token: refreshToken, type: tokenTypes.REFRESH, blacklisted: false });
   if (!refreshTokenDoc) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
   }
-  await refreshTokenDoc.remove();
 };
 
 /**

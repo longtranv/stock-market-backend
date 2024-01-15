@@ -64,6 +64,7 @@ module.exports = {
     from: envVars.EMAIL_FROM,
   },
   GOOGLE_CLIENT_ID: envVars.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: envVars.GOOGLE_CLIENT_SECRET,
   cloudinary: {
     name: envVars.CLOUDINARY_NAME,
     api_key: envVars.CLOUDINARY_API_KEY,
