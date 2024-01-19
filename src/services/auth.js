@@ -45,7 +45,7 @@ const refreshAuth = async (refreshToken) => {
     await Token.deleteMany({user: refreshTokenDoc.user})
     return tokenService.generateAuthTokens(user);
   } catch (error) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate');
+    throw new ApiError(httpStatus.UNAUTHORIZED, error);
   }
 };
 

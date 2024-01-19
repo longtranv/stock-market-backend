@@ -54,6 +54,7 @@ const createOrder = catchAsync(async(req, res)=>{
          order.quantity = 0;
          order.status = 'completed';
       }
+      await orderService.updateOrderbyId(item.id, item)
       
       const userPortfolio = await portfolioService.getPortfolio(order.symbol, order.userId);
       const itemPortfolio = await portfolioService.getPortfolio(item.symbol, item.userId);
