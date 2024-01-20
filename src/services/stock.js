@@ -16,7 +16,7 @@ const insertNewDayStocks = async (todayStock) =>{
     todayStock.map(async(stock)=>{
         const changeStock = await Change.find({symbol: stock.name});
         if(changeStock.length===0){
-            await Change.create({symbol: stock.name});
+            await Change.create({symbol: stock.name, previous: stock.open});
         }else{
 
         }
@@ -78,8 +78,10 @@ const updateCurrentPrice = async(symbol)=>{
     const stockChange = await Change.findOne({symbol: symbol});
     let changePercent = 0;
     if(stockChange.previous !== averagePrice && stockChange.previous !== 0){
-        stockChange.current = averagePrice;
+        
         stockChange.change = ((averagePrice-stockChange.previous)/stockChange.previous)*100;
+        stockChange.previous = stockChange.current;
+        stockChange.current = averagePrice;
     }
     await stockChange.save();
     return stockChange;
