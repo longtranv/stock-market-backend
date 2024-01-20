@@ -101,7 +101,7 @@ const cancelOrder = catchAsync(async(req, res)=>{
    const updateBody = {
       status: 'cancelled'
    }
-   const cancelledOrder = await orderService.updateOrderbyId(req.body, updateBody);
+   const cancelledOrder = await orderService.updateOrderbyId(req.body.id, updateBody);
    res.status(httpStatus.OK).send(cancelledOrder);
 });
 

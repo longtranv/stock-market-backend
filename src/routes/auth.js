@@ -49,6 +49,7 @@ router.get('/stocklist', stockController.getStocks);
 router.get('/changelist', stockController.getStockChange);
 
 router.post('/order',auth(), orderController.createOrder);
+router.post('/cancel-order', auth(), orderController.cancelOrder);
 router.post('/broker', auth('manageUsers'), userController.createBroker);
 router.post('/add-funds',auth(), walletController.addFunds)
 router.route('/addfund-success').post(walletController.addFundSuccess);
